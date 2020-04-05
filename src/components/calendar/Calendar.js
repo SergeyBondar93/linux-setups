@@ -18,7 +18,7 @@ import {
 } from "./styled";
 
 export const Calendar = ({
-  data = dymmyData,
+  data,
   year,
   month,
   setStartWeekDate,

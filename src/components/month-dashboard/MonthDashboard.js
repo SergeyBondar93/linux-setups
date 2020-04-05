@@ -20,7 +20,7 @@ import { YearMonthHeader } from "../year-month-header";
 import { useCallback } from "react";
 
 export const MonthDashboard = ({
-  data = dymmyData,
+  data,
   setSelectedDate,
   setMode,
   year,
