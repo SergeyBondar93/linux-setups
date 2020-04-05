@@ -14,7 +14,8 @@ import { Day } from "./components/day";
 import { DayWrapper } from "./components/day/styled";
 import { MODES } from "./consts";
 
-const App = ({ data = dymmyData }) => {
+const App = ({ data }) => {
+  const [selectedWeek, setSelectedWeek] = useState(null);
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const [startWeekDate, setStartWeekDate] = useState(
@@ -34,6 +35,8 @@ const App = ({ data = dymmyData }) => {
           setMode={setMode}
           setMonth={setMonth}
           setYear={setYear}
+          selectedWeek={selectedWeek}
+          setSelectedWeek={setSelectedWeek}
         />
       </OrganizerBlockWrapper>
       <OrganizerBlockWrapper position={"RIGHT"}>
@@ -50,6 +53,7 @@ const App = ({ data = dymmyData }) => {
             setYear={setYear}
             month={month}
             setMonth={setMonth}
+            setSelectedWeek={setSelectedWeek}
           />
           <ModeSelector mode={mode} setMode={setMode} />
         </div>

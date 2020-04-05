@@ -25,9 +25,10 @@ export const Calendar = ({
   setMode,
   setMonth,
   setYear,
+  selectedWeek,
+  setSelectedWeek,
 }) => {
   const [hoveredWeek, setHoveredWeek] = useState(null);
-  const [selectedWeek, setSelectedWeek] = useState(null);
 
   const monthDays = useMemo(() => {
     return createMonthDashboard({ year, month });
@@ -48,6 +49,7 @@ export const Calendar = ({
 
   const onChangeMonth = useCallback(
     (changes) => {
+      setSelectedWeek(null);
       if (month + changes > 11) {
         setMonth(0);
         setYear(year + 1);

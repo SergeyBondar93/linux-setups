@@ -4,15 +4,23 @@ import Select from "@xcritical/select";
 
 import { yearOptions, monthOptions } from "../../consts";
 
-export const YearMonthHeader = ({ year, month, setYear, setMonth }) => {
+export const YearMonthHeader = ({
+  year,
+  month,
+  setYear,
+  setMonth,
+  setSelectedWeek,
+}) => {
   const onChangeYear = useCallback(
     ({ value }) => {
+      setSelectedWeek(null);
       setYear(value);
     },
     [setMonth, setYear]
   );
   const onChangeMonth = useCallback(
     ({ value }) => {
+      setSelectedWeek(null);
       setMonth(value);
     },
     [setMonth, setYear]
