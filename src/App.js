@@ -12,6 +12,7 @@ import { DayHeader } from "./components/day-header";
 import { getStartWeekDate } from "./utils";
 import { Day } from "./components/day";
 import { DayWrapper } from "./components/day/styled";
+import { MODES } from "./consts";
 
 const App = ({ data = dymmyData }) => {
   const [month, setMonth] = useState(new Date().getMonth());
@@ -21,7 +22,7 @@ const App = ({ data = dymmyData }) => {
   );
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const [mode, setMode] = useState("month");
+  const [mode, setMode] = useState(MODES.MOUNTH);
 
   return (
     <Wrapper>
@@ -31,6 +32,8 @@ const App = ({ data = dymmyData }) => {
           year={year}
           month={month}
           setMode={setMode}
+          setMonth={setMonth}
+          setYear={setYear}
         />
       </OrganizerBlockWrapper>
       <OrganizerBlockWrapper position={"RIGHT"}>
@@ -42,10 +45,15 @@ const App = ({ data = dymmyData }) => {
             paddingTop: "10px",
           }}
         >
-          <YearMonthHeader year={year} month={month} />
+          <YearMonthHeader
+            year={year}
+            setYear={setYear}
+            month={month}
+            setMonth={setMonth}
+          />
           <ModeSelector mode={mode} setMode={setMode} />
         </div>
-        {mode === "day" ? (
+        {mode === MODES.DAY ? (
           <DayHeader date={selectedDate} />
         ) : (
           <WeekHeader
@@ -56,7 +64,7 @@ const App = ({ data = dymmyData }) => {
           />
         )}
 
-        {mode === "month" && (
+        {mode === MODES.MOUNTH && (
           <MonthDashboard
             setSelectedDate={setSelectedDate}
             year={year}
@@ -64,10 +72,10 @@ const App = ({ data = dymmyData }) => {
             setMode={setMode}
           />
         )}
-        {mode === "week" && (
+        {mode === MODES.WEEK && (
           <Week year={year} month={month} startWeekDate={startWeekDate} />
         )}
-        {mode === "day" && (
+        {mode === MODES.DAY && (
           <DayWrapper>
             <Day year={year} month={month} date={selectedDate} />
           </DayWrapper>

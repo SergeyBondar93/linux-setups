@@ -45,3 +45,8 @@ export const WeekDayStyled = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;

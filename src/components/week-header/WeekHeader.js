@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from "react";
 
 import { WeekDaysStyled, WeekDayStyled } from "./styled";
-import { WEEK_DAY_NAMES } from "../../consts";
+import { WEEK_DAY_NAMES, MODES } from "../../consts";
 import { formatDate } from "../../utils";
 
 export const WeekHeader = ({
@@ -21,7 +21,7 @@ export const WeekHeader = ({
   const onClick = useCallback(
     (date) => {
       setSelectedDate(date);
-      setMode("day");
+      setMode(MODES.DAY);
     },
     [setSelectedDate, setMode]
   );
@@ -31,7 +31,8 @@ export const WeekHeader = ({
       {weekDays.map((date, i) => {
         return (
           <WeekDayStyled onClick={() => onClick(date)}>
-            {WEEK_DAY_NAMES[i]} {mode === "week" && formatDate(date, "DD.MM")}
+            {WEEK_DAY_NAMES[i]}{" "}
+            {mode === MODES.WEEK && formatDate(date, "DD.MM")}
           </WeekDayStyled>
         );
       })}

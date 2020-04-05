@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback } from "react";
 
-import { MONTH_NAMES, WEEK_DAY_NAMES } from "../../consts";
+import { MONTH_NAMES, WEEK_DAY_NAMES, MODES } from "../../consts";
 import { dymmyData } from "../../data";
 import {
   formatDate,
@@ -14,6 +14,7 @@ import {
   MonthDayStyled,
   WeekDaysStyled,
   WeekDayStyled,
+  HeaderWrapper,
 } from "./styled";
 
 export const Calendar = ({
@@ -22,6 +23,8 @@ export const Calendar = ({
   month,
   setStartWeekDate,
   setMode,
+  setMonth,
+  setYear,
 }) => {
   const [hoveredWeek, setHoveredWeek] = useState(null);
   const [selectedWeek, setSelectedWeek] = useState(null);
@@ -40,12 +43,31 @@ export const Calendar = ({
     const startWeekDate = getStartWeekDate(date);
     setStartWeekDate(startWeekDate);
     setSelectedWeek(weekNumber);
-    setMode("week");
+    setMode(MODES.WEEK);
   }, []);
+
+  const onChangeMonth = useCallback(
+    (changes) => {
+      if (month + changes > 11) {
+        setMonth(0);
+        setYear(year + 1);
+      } else if (month + changes > 0) {
+        setMonth(month + changes);
+      } else if (month + changes < 0) {
+        setMonth(11);
+        setYear(year - 1);
+      }
+    },
+    [year, month, setYear, setMonth]
+  );
 
   return (
     <>
-      <div className="month">{MONTH_NAMES[month]}</div>
+      <HeaderWrapper>
+        <button onClick={() => onChangeMonth(-1)}>{"<="}</button>
+        {MONTH_NAMES[month]}
+        <button onClick={() => onChangeMonth(1)}>=></button>
+      </HeaderWrapper>
 
       <WeekDaysStyled>
         {WEEK_DAY_NAMES.map((_el, i) => {

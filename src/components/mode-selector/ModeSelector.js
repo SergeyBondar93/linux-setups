@@ -1,21 +1,7 @@
 import React, { useMemo, useCallback } from "react";
 
 import Select from "@xcritical/select";
-
-const modeOptions = [
-  {
-    value: "day",
-    label: "day",
-  },
-  {
-    value: "week",
-    label: "week",
-  },
-  {
-    value: "month",
-    label: "month",
-  },
-];
+import { modeOptions } from "../../consts";
 
 export const ModeSelector = ({ mode, setMode }) => {
   const option = useMemo(() => {

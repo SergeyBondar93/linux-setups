@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 
-import { MONTH_NAMES, WEEK_DAY_NAMES } from "../../consts";
+import { MONTH_NAMES, WEEK_DAY_NAMES, MODES } from "../../consts";
 import { dymmyData } from "../../data";
 import {
   formatDate,
@@ -23,10 +23,9 @@ export const MonthDashboard = ({
   data = dymmyData,
   setSelectedDate,
   setMode,
+  year,
+  month,
 }) => {
-  const [month, setMonth] = useState(new Date().getMonth());
-  const [year, setYear] = useState(new Date().getFullYear());
-
   const monthDays = useMemo(() => {
     return createMonthDashboard({ year, month });
   }, [month, year]);
@@ -34,7 +33,7 @@ export const MonthDashboard = ({
   const onClick = useCallback(
     (date) => {
       setSelectedDate(date);
-      setMode("day");
+      setMode(MODES.DAY);
     },
     [setSelectedDate]
   );
