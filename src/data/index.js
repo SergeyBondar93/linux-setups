@@ -1,0 +1,53 @@
+export const dymmyData = [
+  {
+    id: 936,
+    managerId: 3799200,
+    eventName: "1",
+    eventType: "Call",
+    eventStatus: "Active",
+    eventDate: "2020-04-05T08:30:00",
+    description: "1",
+  },
+
+  {
+    firstName: "وجدان",
+    lastName: "محمد العتيبي",
+    salesStatus: "No Response",
+    id: 937,
+    managerId: 4159748,
+    leadId: 132465,
+    eventName: "Test",
+    eventType: "Call",
+    eventStatus: "Active",
+    eventDate: "2020-04-14T15:00:00",
+    description: "test calendar events",
+  },
+
+  {
+    firstName: "وجدان",
+    lastName: "محمد العتيبي",
+    salesStatus: "No Response",
+    id: 939,
+    managerId: 4159748,
+    leadId: 132465,
+    eventName: "Test",
+    eventType: "Call",
+    eventStatus: "Active",
+    eventDate: "2020-04-10T08:00:00",
+    description: "fsdfsdfsdsdf",
+  },
+
+  {
+    firstName: "وجدان",
+    lastName: "محمد العتيبي",
+    salesStatus: "No Response",
+    id: 940,
+    managerId: 4159748,
+    leadId: 132465,
+    eventName: "Test",
+    eventType: "Call",
+    eventStatus: "Active",
+    eventDate: "2020-04-09T18:30:00",
+    description: "fsdfsdfs",
+  },
+];
