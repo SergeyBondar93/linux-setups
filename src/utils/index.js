@@ -77,7 +77,6 @@ export const createMonthDashboard = ({ year, month }) => {
 };
 
 export const getStartWeekDate = (date) => {
-  console.log(date);
   const clickedDay = date.getDay();
   const { DD, MM, YYYY } = formatDate(date, "object");
   const startWeekDate = new Date(YYYY, MM, DD - clickedDay);

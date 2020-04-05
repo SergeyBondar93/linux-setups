@@ -17,14 +17,27 @@ import {
 import { OrganizerBlockWrapper } from "../common/styled";
 import { WeekHeader } from "../week-header/WeekHeader";
 import { YearMonthHeader } from "../year-month-header";
+import { useCallback } from "react";
 
-export const MonthDashboard = ({ data = dymmyData }) => {
+export const MonthDashboard = ({
+  data = dymmyData,
+  setSelectedDate,
+  setMode,
+}) => {
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
 
   const monthDays = useMemo(() => {
     return createMonthDashboard({ year, month });
   }, [month, year]);
+
+  const onClick = useCallback(
+    (date) => {
+      setSelectedDate(date);
+      setMode("day");
+    },
+    [setSelectedDate]
+  );
 
   return (
     <>
@@ -37,6 +50,7 @@ export const MonthDashboard = ({ data = dymmyData }) => {
             <MonthDayStyled
               isCurrentMonth={isCurrentMonth}
               isCurrentDate={isCurrentDate}
+              onClick={() => onClick(el)}
             >
               {formatDate(el)}
             </MonthDayStyled>

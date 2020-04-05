@@ -8,6 +8,7 @@ import { Week } from "./components/week/Week";
 import { YearMonthHeader } from "./components/year-month-header";
 import { WeekHeader } from "./components/week-header";
 import { ModeSelector } from "./components/mode-selector";
+import { DayHeader } from "./components/day-header";
 import { getStartWeekDate } from "./utils";
 import { Day } from "./components/day";
 import { DayWrapper } from "./components/day/styled";
@@ -29,6 +30,7 @@ const App = ({ data = dymmyData }) => {
           setStartWeekDate={setStartWeekDate}
           year={year}
           month={month}
+          setMode={setMode}
         />
       </OrganizerBlockWrapper>
       <OrganizerBlockWrapper position={"RIGHT"}>
@@ -43,10 +45,25 @@ const App = ({ data = dymmyData }) => {
           <YearMonthHeader year={year} month={month} />
           <ModeSelector mode={mode} setMode={setMode} />
         </div>
-        {mode !== "day" && (
-          <WeekHeader startWeekDate={startWeekDate} mode={mode} />
+        {mode === "day" ? (
+          <DayHeader date={selectedDate} />
+        ) : (
+          <WeekHeader
+            setSelectedDate={setSelectedDate}
+            setMode={setMode}
+            startWeekDate={startWeekDate}
+            mode={mode}
+          />
         )}
-        {mode === "month" && <MonthDashboard year={year} month={month} />}
+
+        {mode === "month" && (
+          <MonthDashboard
+            setSelectedDate={setSelectedDate}
+            year={year}
+            month={month}
+            setMode={setMode}
+          />
+        )}
         {mode === "week" && (
           <Week year={year} month={month} startWeekDate={startWeekDate} />
         )}

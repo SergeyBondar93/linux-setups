@@ -23,6 +23,5 @@ export const ModeSelector = ({ mode, setMode }) => {
   }, [mode]);
 
   const onChange = useCallback(({ value }) => setMode(value));
-
-  return <Select option={option} options={modeOptions} onChange={onChange} />;
+  return <Select value={option} options={modeOptions} onChange={onChange} />;
 };

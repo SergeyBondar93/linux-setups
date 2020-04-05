@@ -21,6 +21,7 @@ export const Calendar = ({
   year,
   month,
   setStartWeekDate,
+  setMode,
 }) => {
   const [hoveredWeek, setHoveredWeek] = useState(null);
   const [selectedWeek, setSelectedWeek] = useState(null);
@@ -39,6 +40,7 @@ export const Calendar = ({
     const startWeekDate = getStartWeekDate(date);
     setStartWeekDate(startWeekDate);
     setSelectedWeek(weekNumber);
+    setMode("week");
   }, []);
 
   return (
