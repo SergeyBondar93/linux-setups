@@ -10,9 +10,6 @@ export const MonthDashboardStyled = styled.div`
 export const MonthDayStyled = styled.div`
   width: calc(100% / 7);
   outline: 1px solid gray;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   transition: 0.2s;
   background-color: ${({ isCurrentMonth, isCurrentDate }) => {
     if (isCurrentDate) return "rgb(247, 177, 85)";

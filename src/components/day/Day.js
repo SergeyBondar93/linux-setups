@@ -4,6 +4,7 @@ import { formatDate } from "../../utils";
 import { TIME_INTERVALS } from "../../consts";
 import { useCallback } from "react";
 import { connect } from "react-redux";
+import { Events } from "../events/Events";
 
 const DayStyled = styled.div`
   width: calc(100% / 7);
@@ -12,47 +13,26 @@ const DayStyled = styled.div`
   flex-grow: 2;
 `;
 
-const TimeInterval = styled.div`
-  height: 20px;
-  border-top: 1px solid gray;
-  padding: 2px;
-  :hover {
-    background-color: rgb(232, 238, 201);
-  }
-`;
-
-const STEP_MINUTES = 15;
-
-const Day = ({
-  selectedDate,
-  setSelectedDate = () => {},
-  setMode = () => {},
-}) => {
-  const intervals = useMemo(() => {
-    const result = new Array(TIME_INTERVALS).fill(0).map((_el, i) => {
-      const dateWithTime = new Date(selectedDate).setMinutes(i * STEP_MINUTES);
-      return dateWithTime;
-    });
-    return result.map((date) => new Date(date));
-  }, [selectedDate]);
-
-  const onClick = useCallback(() => {
-    setSelectedDate(selectedDate);
-    setMode("day");
-  }, [setSelectedDate, selectedDate]);
-
+const Day = ({ date, events }) => {
   return (
-    <DayStyled onClick={onClick}>
-      {intervals.map((dateWithTime) => {
-        return <TimeInterval>{formatDate(dateWithTime, "hh:mm")}</TimeInterval>;
-      })}
+    <DayStyled>
+      <Events events={events} />
     </DayStyled>
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, { date }) => {
+  const $date = date || state.organizer.selectedDate;
+
+  const formatToEventDate = formatDate($date, "YYYY-MM-DD");
+  const $events = state.organizer.events.filter(({ eventDate }) => {
+    const newEventDate = formatDate(new Date(eventDate), "YYYY-MM-DD");
+    return newEventDate === formatToEventDate;
+  });
+
   return {
-    selectedDate: state.organizer.selectedDate,
+    date: $date,
+    events: $events,
   };
 };
 

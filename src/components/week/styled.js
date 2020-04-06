@@ -4,7 +4,7 @@ import { scrollbarCssVisible, scrollbarCssHidden } from "../common/scrollbar";
 export const WeekWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: calc(100% + 8px);
+  width: calc(100%);
   min-width: 700px;
   height: 700px;
   overflow: auto;

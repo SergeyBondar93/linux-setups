@@ -11,7 +11,9 @@ export const formatDate = (dateObj, format = "DD.MM.YYYY") => {
       ? `0${dateObj.getMonth() + 1}`
       : dateObj.getMonth() + 1;
   const YYYY = dateObj.getFullYear();
-  const DD = dateObj.getDate();
+
+  const DD =
+    dateObj.getDate() < 10 ? `0${dateObj.getDate()}` : dateObj.getDate();
 
   const hh =
     dateObj.getHours() < 10 ? `0${dateObj.getHours()}` : dateObj.getHours();
@@ -19,8 +21,13 @@ export const formatDate = (dateObj, format = "DD.MM.YYYY") => {
     dateObj.getMinutes() < 10
       ? `0${dateObj.getMinutes()}`
       : dateObj.getMinutes();
+  const ss =
+    dateObj.getSeconds() < 10
+      ? `0${dateObj.getSeconds()}`
+      : dateObj.getSeconds();
 
   if (format === "DD.MM.YYYY") return `${DD}.${MM}.${YYYY}`;
+  if (format === "YYYY-MM-DD") return `${YYYY}-${MM}-${DD}`;
   if (format === "DD.MM") return `${DD}.${MM}`;
   if (format === "DD") return `${DD}`;
   if (format === "object")
@@ -34,6 +41,9 @@ export const formatDate = (dateObj, format = "DD.MM.YYYY") => {
   }
   if (format === "DD.MM.YYYY hh:mm") {
     return `${DD}.${MM}.${YYYY} ${hh}:${mm}`;
+  }
+  if (format === "YYYY-MM-DDThh:mm:ss") {
+    return `${YYYY}-${MM}-${DD}T${hh}:${mm}:${ss}`;
   }
 };
 

@@ -1,35 +1,49 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 
-import { MONTH_NAMES, WEEK_DAY_NAMES, MODES } from "../../consts";
-import { dymmyData } from "../../data";
+import { MODES } from "../../consts";
 import {
   formatDate,
   checkIsCurrentDate,
   createMonthDashboard,
 } from "../../utils";
 
-import {
-  MonthDashboardStyled,
-  MonthDayStyled,
-  WeekDaysStyled,
-  WeekDayStyled,
-} from "./styled";
-import { OrganizerBlockWrapper } from "../common/styled";
-import { WeekHeader } from "../week-header/WeekHeader";
-import { YearMonthHeader } from "../year-month-header";
+import { MonthDashboardStyled, MonthDayStyled } from "./styled";
 import { useCallback } from "react";
 import { connect } from "react-redux";
 import { changeDisplayMode, changeSelectedDate } from "../../actions/actions";
+import { Events } from "../events/Events";
 
 const MonthDashboard = ({
   onChangeSelectedDate,
   onChangeDisplayMode,
   year,
   month,
+  events,
 }) => {
   const monthDays = useMemo(() => {
-    return createMonthDashboard({ year, month });
-  }, [month, year]);
+    const $events = events.map(({ eventDate, ...event }) => {
+      const newEventDate = formatDate(new Date(eventDate), "YYYY-MM-DD");
+      return {
+        eventDate: newEventDate,
+        ...event,
+      };
+    });
+
+    const days = createMonthDashboard({ year, month });
+
+    const daysWithEvents = days.map((date) => {
+      const formatToEventDate = formatDate(date, "YYYY-MM-DD");
+
+      const events = $events.filter(({ eventDate }) => {
+        return eventDate === formatToEventDate;
+      });
+      return {
+        date,
+        events,
+      };
+    });
+    return daysWithEvents;
+  }, [month, year, events]);
 
   const onClick = useCallback(
     (date) => {
@@ -42,17 +56,17 @@ const MonthDashboard = ({
   return (
     <>
       <MonthDashboardStyled>
-        {monthDays.map((el) => {
-          const isCurrentMonth = month === el.getMonth();
-          const isCurrentDate = checkIsCurrentDate(el);
-
+        {monthDays.map(({ date, events }) => {
+          const isCurrentMonth = month === date.getMonth();
+          const isCurrentDate = checkIsCurrentDate(date);
           return (
             <MonthDayStyled
               isCurrentMonth={isCurrentMonth}
               isCurrentDate={isCurrentDate}
-              onClick={() => onClick(el)}
+              onClick={() => onClick(date)}
             >
-              {formatDate(el)}
+              {formatDate(date)}
+              <Events events={events} />
             </MonthDayStyled>
           );
         })}
@@ -65,6 +79,7 @@ const mapStateToProps = (state) => {
   return {
     year: state.organizer.year,
     month: state.organizer.month,
+    events: state.organizer.events,
   };
 };
 

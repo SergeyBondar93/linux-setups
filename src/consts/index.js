@@ -1,4 +1,4 @@
-export const SHOW_DAYS_IN_CALENDAR = 7 * 7;
+export const SHOW_DAYS_IN_CALENDAR = 7 * 6;
 
 export const TIME_INTERVALS = 4 * 24;
 
