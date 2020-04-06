@@ -25,7 +25,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://sergeybondar93.github.io/tabs/",
+  "homepage": "https://sergeybondar93.github.io/organizer/",
   "eslintConfig": {
     "extends": "react-app"
   },
