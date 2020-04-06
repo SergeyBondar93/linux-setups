@@ -1,1 +1,1 @@
-https://sergeybondar93.github.io/organizer/
+http://sbondar.ru:3005/
