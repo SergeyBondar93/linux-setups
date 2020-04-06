@@ -3,12 +3,18 @@ import React, { useMemo, useCallback } from "react";
 import { WeekDaysStyled, WeekDayStyled } from "./styled";
 import { WEEK_DAY_NAMES, MODES } from "../../consts";
 import { formatDate } from "../../utils";
+import {
+  changeDisplayMode,
+  changeStartWeek,
+  changeSelectedDate,
+} from "../../actions/actions";
+import { connect } from "react-redux";
 
-export const WeekHeader = ({
+const WeekHeader = ({
   startWeekDate,
-  mode,
-  setSelectedDate,
-  setMode,
+  displayMode,
+  onChangeSelectedDate,
+  onChangeDisplayMode,
 }) => {
   const weekDays = useMemo(() => {
     const date = new Date(startWeekDate).getDate();
@@ -20,10 +26,10 @@ export const WeekHeader = ({
 
   const onClick = useCallback(
     (date) => {
-      setSelectedDate(date);
-      setMode(MODES.DAY);
+      onChangeSelectedDate(date);
+      onChangeDisplayMode(MODES.DAY);
     },
-    [setSelectedDate, setMode]
+    [onChangeSelectedDate, onChangeDisplayMode]
   );
 
   return (
@@ -32,10 +38,29 @@ export const WeekHeader = ({
         return (
           <WeekDayStyled onClick={() => onClick(date)}>
             {WEEK_DAY_NAMES[i]}{" "}
-            {mode === MODES.WEEK && formatDate(date, "DD.MM")}
+            {displayMode === MODES.WEEK && formatDate(date, "DD.MM")}
           </WeekDayStyled>
         );
       })}
     </WeekDaysStyled>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    displayMode: state.organizer.displayMode,
+    startWeekDate: state.organizer.startWeekDate,
+  };
+};
+
+const mapDispatchToProps = {
+  onChangeDisplayMode: changeDisplayMode,
+  onChangeSelectedDate: changeSelectedDate,
+};
+
+const WeekHeaderContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WeekHeader);
+
+export { WeekHeaderContainer as WeekHeader };

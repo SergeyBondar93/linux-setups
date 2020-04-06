@@ -1,6 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 
-import { dymmyData } from "./data";
 import { MonthDashboard } from "./components/month-dashboard/MonthDashboard";
 import { Calendar } from "./components/calendar";
 import { Wrapper, OrganizerBlockWrapper } from "./components/common/styled";
@@ -13,28 +12,15 @@ import { getStartWeekDate } from "./utils";
 import { Day } from "./components/day";
 import { DayWrapper } from "./components/day/styled";
 import { MODES } from "./consts";
+import { connect } from "react-redux";
 
-const App = ({ data }) => {
+const App = ({ data, displayMode }) => {
   const [selectedWeek, setSelectedWeek] = useState(null);
-  const [month, setMonth] = useState(new Date().getMonth());
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [startWeekDate, setStartWeekDate] = useState(
-    getStartWeekDate(new Date())
-  );
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const [mode, setMode] = useState(MODES.MOUNTH);
 
   return (
     <Wrapper>
       <OrganizerBlockWrapper position={"LEFT"}>
         <Calendar
-          setStartWeekDate={setStartWeekDate}
-          year={year}
-          month={month}
-          setMode={setMode}
-          setMonth={setMonth}
-          setYear={setYear}
           selectedWeek={selectedWeek}
           setSelectedWeek={setSelectedWeek}
         />
@@ -48,40 +34,16 @@ const App = ({ data }) => {
             paddingTop: "10px",
           }}
         >
-          <YearMonthHeader
-            year={year}
-            setYear={setYear}
-            month={month}
-            setMonth={setMonth}
-            setSelectedWeek={setSelectedWeek}
-          />
-          <ModeSelector mode={mode} setMode={setMode} />
+          <YearMonthHeader setSelectedWeek={setSelectedWeek} />
+          <ModeSelector />
         </div>
-        {mode === MODES.DAY ? (
-          <DayHeader date={selectedDate} />
-        ) : (
-          <WeekHeader
-            setSelectedDate={setSelectedDate}
-            setMode={setMode}
-            startWeekDate={startWeekDate}
-            mode={mode}
-          />
-        )}
+        {displayMode === MODES.DAY ? <DayHeader /> : <WeekHeader />}
 
-        {mode === MODES.MOUNTH && (
-          <MonthDashboard
-            setSelectedDate={setSelectedDate}
-            year={year}
-            month={month}
-            setMode={setMode}
-          />
-        )}
-        {mode === MODES.WEEK && (
-          <Week year={year} month={month} startWeekDate={startWeekDate} />
-        )}
-        {mode === MODES.DAY && (
+        {displayMode === MODES.MOUNTH && <MonthDashboard />}
+        {displayMode === MODES.WEEK && <Week />}
+        {displayMode === MODES.DAY && (
           <DayWrapper>
-            <Day year={year} month={month} date={selectedDate} />
+            <Day />
           </DayWrapper>
         )}
       </OrganizerBlockWrapper>
@@ -89,4 +51,12 @@ const App = ({ data }) => {
   );
 };
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    displayMode: state.organizer.displayMode,
+  };
+};
+
+const AppContainer = connect(mapStateToProps)(App);
+
+export default AppContainer;

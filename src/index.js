@@ -7,10 +7,10 @@ import { dymmyData } from "./data";
 
 import "./index.css";
 import { createStore, combineReducers } from "redux";
-import { organizerReducer } from "./reducer/organizerReducer";
+import { organizer } from "./reducer/organizerReducer";
 
 const store = createStore(
-  combineReducers({ organizerReducer }),
+  combineReducers({ organizer }),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 

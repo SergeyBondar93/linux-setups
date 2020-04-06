@@ -3,27 +3,29 @@ import React, { useCallback, useMemo } from "react";
 import Select from "@xcritical/select";
 
 import { yearOptions, monthOptions } from "../../consts";
+import { changeMonth, changeYear } from "../../actions/actions";
+import { connect } from "react-redux";
 
-export const YearMonthHeader = ({
+const YearMonthHeader = ({
   year,
   month,
-  setYear,
-  setMonth,
+  onChangeYear,
+  onChangeMonth,
   setSelectedWeek,
 }) => {
-  const onChangeYear = useCallback(
+  const handleChangeYear = useCallback(
     ({ value }) => {
       setSelectedWeek(null);
-      setYear(value);
+      onChangeYear(value);
     },
-    [setMonth, setYear]
+    [onChangeMonth, onChangeYear]
   );
-  const onChangeMonth = useCallback(
+  const handleChangeMonth = useCallback(
     ({ value }) => {
       setSelectedWeek(null);
-      setMonth(value);
+      onChangeMonth(value);
     },
-    [setMonth, setYear]
+    [onChangeMonth, onChangeYear]
   );
 
   const $year = useMemo(() => {
@@ -38,15 +40,34 @@ export const YearMonthHeader = ({
       <Select
         value={$month}
         options={monthOptions}
-        onChange={onChangeMonth}
+        onChange={handleChangeMonth}
         isSearchable
       ></Select>
       <Select
         value={$year}
         options={yearOptions}
-        onChange={onChangeYear}
+        onChange={handleChangeYear}
         isSearchable
       ></Select>
     </div>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    year: state.organizer.year,
+    month: state.organizer.month,
+  };
+};
+
+const mapDispatchToProps = {
+  onChangeMonth: changeMonth,
+  onChangeYear: changeYear,
+};
+
+const YearMonthHeaderContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(YearMonthHeader);
+
+export { YearMonthHeaderContainer as YearMonthHeader };

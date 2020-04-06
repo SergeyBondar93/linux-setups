@@ -2,8 +2,9 @@ import React, { useMemo } from "react";
 
 import { Day } from "../day";
 import { WeekWrapper } from "./styled";
+import { connect } from "react-redux";
 
-export const Week = ({ startWeekDate, year, month }) => {
+const Week = ({ startWeekDate, year, month }) => {
   const weekDays = useMemo(() => {
     const date = new Date(startWeekDate).getDate();
     const days = new Array(7).fill(0).map((el, i) => {
@@ -20,3 +21,15 @@ export const Week = ({ startWeekDate, year, month }) => {
     </WeekWrapper>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    year: state.organizer.year,
+    month: state.organizer.month,
+    startWeekDate: state.organizer.startWeekDate,
+  };
+};
+
+const WeekContainer = connect(mapStateToProps)(Week);
+
+export { WeekContainer as Week };

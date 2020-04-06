@@ -16,15 +16,21 @@ import {
   WeekDayStyled,
   HeaderWrapper,
 } from "./styled";
+import { connect } from "react-redux";
+import {
+  changeStartWeek,
+  changeDisplayMode,
+  changeMonth,
+  changeYear,
+} from "../../actions/actions";
 
-export const Calendar = ({
-  data,
+const Calendar = ({
   year,
   month,
-  setStartWeekDate,
-  setMode,
-  setMonth,
-  setYear,
+  onChangeStartWeekDate,
+  onChangeMode,
+  onChangeMonth,
+  onChangeYear,
   selectedWeek,
   setSelectedWeek,
 }) => {
@@ -42,33 +48,33 @@ export const Calendar = ({
   }, []);
   const onClick = useCallback((weekNumber, date) => {
     const startWeekDate = getStartWeekDate(date);
-    setStartWeekDate(startWeekDate);
+    onChangeStartWeekDate(startWeekDate);
     setSelectedWeek(weekNumber);
-    setMode(MODES.WEEK);
+    onChangeMode(MODES.WEEK);
   }, []);
 
-  const onChangeMonth = useCallback(
+  const handleChangeMonth = useCallback(
     (changes) => {
       setSelectedWeek(null);
       if (month + changes > 11) {
-        setMonth(0);
-        setYear(year + 1);
+        onChangeMonth(0);
+        onChangeYear(year + 1);
       } else if (month + changes > 0) {
-        setMonth(month + changes);
+        onChangeMonth(month + changes);
       } else if (month + changes < 0) {
-        setMonth(11);
-        setYear(year - 1);
+        onChangeMonth(11);
+        onChangeYear(year - 1);
       }
     },
-    [year, month, setYear, setMonth]
+    [year, month, onChangeYear, onChangeMonth]
   );
 
   return (
     <>
       <HeaderWrapper>
-        <button onClick={() => onChangeMonth(-1)}>{"<="}</button>
+        <button onClick={() => handleChangeMonth(-1)}>{"<="}</button>
         {MONTH_NAMES[month]}
-        <button onClick={() => onChangeMonth(1)}>=></button>
+        <button onClick={() => handleChangeMonth(1)}>=></button>
       </HeaderWrapper>
 
       <WeekDaysStyled>
@@ -103,3 +109,24 @@ export const Calendar = ({
     </>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    year: state.organizer.year,
+    month: state.organizer.month,
+  };
+};
+
+const mapDispatchToProps = {
+  onChangeStartWeekDate: changeStartWeek,
+  onChangeMode: changeDisplayMode,
+  onChangeMonth: changeMonth,
+  onChangeYear: changeYear,
+};
+
+const CalendarContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Calendar);
+
+export { CalendarContainer as Calendar };

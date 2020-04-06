@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { formatDate } from "../../utils";
 import { TIME_INTERVALS } from "../../consts";
 import { useCallback } from "react";
+import { connect } from "react-redux";
 
 const DayStyled = styled.div`
   width: calc(100% / 7);
@@ -22,23 +23,23 @@ const TimeInterval = styled.div`
 
 const STEP_MINUTES = 15;
 
-export const Day = ({
-  date,
+const Day = ({
+  selectedDate,
   setSelectedDate = () => {},
   setMode = () => {},
 }) => {
   const intervals = useMemo(() => {
     const result = new Array(TIME_INTERVALS).fill(0).map((_el, i) => {
-      const dateWithTime = new Date(date).setMinutes(i * STEP_MINUTES);
+      const dateWithTime = new Date(selectedDate).setMinutes(i * STEP_MINUTES);
       return dateWithTime;
     });
     return result.map((date) => new Date(date));
-  }, [date]);
+  }, [selectedDate]);
 
   const onClick = useCallback(() => {
-    setSelectedDate(date);
+    setSelectedDate(selectedDate);
     setMode("day");
-  }, [setSelectedDate, date]);
+  }, [setSelectedDate, selectedDate]);
 
   return (
     <DayStyled onClick={onClick}>
@@ -48,3 +49,13 @@ export const Day = ({
     </DayStyled>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    selectedDate: state.organizer.selectedDate,
+  };
+};
+
+const DayContainer = connect(mapStateToProps)(Day);
+
+export { DayContainer as Day };

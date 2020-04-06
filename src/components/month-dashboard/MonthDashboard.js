@@ -18,11 +18,12 @@ import { OrganizerBlockWrapper } from "../common/styled";
 import { WeekHeader } from "../week-header/WeekHeader";
 import { YearMonthHeader } from "../year-month-header";
 import { useCallback } from "react";
+import { connect } from "react-redux";
+import { changeDisplayMode, changeSelectedDate } from "../../actions/actions";
 
-export const MonthDashboard = ({
-  data,
-  setSelectedDate,
-  setMode,
+const MonthDashboard = ({
+  onChangeSelectedDate,
+  onChangeDisplayMode,
   year,
   month,
 }) => {
@@ -32,10 +33,10 @@ export const MonthDashboard = ({
 
   const onClick = useCallback(
     (date) => {
-      setSelectedDate(date);
-      setMode(MODES.DAY);
+      onChangeSelectedDate(date);
+      onChangeDisplayMode(MODES.DAY);
     },
-    [setSelectedDate]
+    [onChangeSelectedDate]
   );
 
   return (
@@ -59,3 +60,22 @@ export const MonthDashboard = ({
     </>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    year: state.organizer.year,
+    month: state.organizer.month,
+  };
+};
+
+const mapDispatchToProps = {
+  onChangeDisplayMode: changeDisplayMode,
+  onChangeSelectedDate: changeSelectedDate,
+};
+
+const MonthDashboardContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MonthDashboard);
+
+export { MonthDashboardContainer as MonthDashboard };
