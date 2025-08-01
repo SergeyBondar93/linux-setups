@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # curl -LO https://raw.githubusercontent.com/SergeyBondar93/organizer/refs/heads/master/basic-arch-linux.sh
-# chmod +x arch-install.sh
-# ./arch-install.sh
+# chmod +x basic-arch-linux.sh
+# ./basic-arch-linux.sh
 
 set -e
 
@@ -60,8 +60,8 @@ echo "archhost" > /etc/hostname
 echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost\n127.0.1.1\tarchhost.localdomain\tarchhost" > /etc/hosts
 
 useradd -m -G wheel user
-echo user:password | chpasswd
-echo root:password | chpasswd
+echo user:1111 | chpasswd
+echo root:1111 | chpasswd
 echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
 
 systemctl enable NetworkManager
