@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# что бы запустить этот скрипт необходимо включить EFI на виртуальной машине
 # curl -LO https://raw.githubusercontent.com/SergeyBondar93/organizer/refs/heads/master/basic-arch-linux.sh
 # chmod +x basic-arch-linux.sh
 # ./basic-arch-linux.sh
