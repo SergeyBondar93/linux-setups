@@ -2,7 +2,7 @@
 
 # curl -LO https://raw.githubusercontent.com/SergeyBondar93/organizer/refs/heads/master/install-gui.sh
 # chmod +x install-gui.sh
-# ./arch-install.sh
+# ./install-gui.sh
 
 echo "✅ Установка графического окружения..."
 
