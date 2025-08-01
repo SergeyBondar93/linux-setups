@@ -2,58 +2,68 @@
 
 set -e
 
-DISK="/dev/sda"
+echo "[*] Проверка EFI..."
+ls /sys/firmware/efi/efivars >/dev/null || { echo "Система не в EFI-режиме"; exit 1; }
 
-# Проверка, монтирована ли система
-if mount | grep -q "/mnt"; then
-  echo "[!] /mnt уже смонтирован — размонтирую..."
-  umount -R /mnt || true
+echo "[*] Поиск дисков..."
+DISKS=($(lsblk -dno NAME,TYPE | awk '$2=="disk"{print "/dev/"$1}'))
+if [[ ${#DISKS[@]} -ne 1 ]]; then
+  echo "Найдено несколько дисков: ${DISKS[*]}. Укажи диск вручную."
+  exit 1
 fi
+DISK="${DISKS[0]}"
+echo "[*] Используем диск: $DISK"
 
-echo "[*] Стираем $DISK"
-wipefs -af "$DISK"
-sgdisk -Z "$DISK"
+echo "[*] Размонтирование, если что-то уже примонтировано..."
+umount -R /mnt 2>/dev/null || true
+swapoff -a || true
+[[ -d /mnt ]] && rm -rf /mnt/*
 
-echo "[*] Создание разделов GPT: EFI (512MB) + Linux root"
-sgdisk -n1:0:+512M -t1:ef00 -c1:"EFI System" "$DISK"
-sgdisk -n2:0:0     -t2:8300 -c2:"Linux root" "$DISK"
+echo "[*] Создание GPT и разделов..."
+parted -s "$DISK" mklabel gpt
+parted -s "$DISK" mkpart primary fat32 1MiB 512MiB
+parted -s "$DISK" set 1 esp on
+parted -s "$DISK" mkpart primary linux-swap 512MiB 2.5GiB
+parted -s "$DISK" mkpart primary ext4 2.5GiB 100%
 
-echo "[*] Форматирование"
+echo "[*] Форматирование разделов..."
 mkfs.fat -F32 "${DISK}1"
-mkfs.ext4 -F "${DISK}2"
+mkswap "${DISK}2"
+mkfs.ext4 "${DISK}3"
 
-echo "[*] Монтирование"
-mount "${DISK}2" /mnt
-mkdir -p /mnt/boot/efi
-mount "${DISK}1" /mnt/boot/efi
+echo "[*] Монтирование..."
+mount "${DISK}3" /mnt
+mkdir -p /mnt/boot
+mount "${DISK}1" /mnt/boot
+swapon "${DISK}2"
 
-echo "[*] Установка базовой системы"
-pacstrap /mnt base linux linux-firmware grub efibootmgr networkmanager vim sudo
+echo "[*] Установка базовой системы..."
+pacstrap -K /mnt base linux linux-firmware vim sudo networkmanager grub efibootmgr
 
-echo "[*] Генерация fstab"
+echo "[*] Генерация fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab
 
-echo "[*] Настройка системы"
+echo "[*] Настройка системы внутри chroot..."
 arch-chroot /mnt /bin/bash <<EOF
 ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 hwclock --systohc
 
-sed -i 's/#en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
-echo "archvm" > /etc/hostname
-echo "127.0.0.1   localhost" >> /etc/hosts
-echo "::1         localhost" >> /etc/hosts
-echo "127.0.1.1   archvm.localdomain archvm" >> /etc/hosts
+echo "archhost" > /etc/hostname
+echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost\n127.0.1.1\tarchhost.localdomain\tarchhost" > /etc/hosts
 
-echo "root:password" | chpasswd
+useradd -m -G wheel user
+echo user:password | chpasswd
+echo root:password | chpasswd
+echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
 
 systemctl enable NetworkManager
 
-echo "[*] Установка GRUB"
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 
-echo "[✔] Готово! Можешь перезагружаться!"
+echo "[✔] Установка завершена. Можно перезагружаться!"
