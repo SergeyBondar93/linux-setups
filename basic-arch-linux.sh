@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# curl -LO https://raw.githubusercontent.com/SergeyBondar93/organizer/refs/heads/master/basic-arch-linux.sh
+# chmod +x arch-install.sh
+# ./arch-install.sh
+
 set -e
 
 echo "[*] Проверка EFI..."
