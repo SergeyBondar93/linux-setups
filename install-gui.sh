@@ -1,3 +1,9 @@
+#!/bin/bash
+
+# curl -LO https://raw.githubusercontent.com/SergeyBondar93/organizer/refs/heads/master/install-gui.sh
+# chmod +x install-gui.sh
+# ./arch-install.sh
+
 echo "✅ Установка графического окружения..."
 
 # Установка X сервера и драйверов (для Intel, AMD, Nvidia по необходимости)
