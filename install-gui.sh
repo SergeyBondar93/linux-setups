@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# необходимо переключиться в su для выполнения скритпа
 # curl -LO https://raw.githubusercontent.com/SergeyBondar93/organizer/refs/heads/master/install-gui.sh
 # chmod +x install-gui.sh
 # ./install-gui.sh
