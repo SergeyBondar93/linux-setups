@@ -34,7 +34,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 # Пользователь
 adduser -D user
-echo "user:alpine" | chpasswd
+echo "user:1111" | chpasswd
 
 # Графика и браузер
 apk add xorg-server xfce4 xfce4-terminal lightdm lightdm-gtk-greeter
