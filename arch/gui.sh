@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # необходимо переключиться в su для выполнения скритпа
-# curl -LO https://raw.githubusercontent.com/SergeyBondar93/organizer/refs/heads/master/install-gui.sh
-# chmod +x install-gui.sh
-# ./install-gui.sh
+# curl -LO https://raw.githubusercontent.com/SergeyBondar93/linux-setups/refs/heads/master/arch/gui.sh
+# chmod +x gui.sh
+# ./gui.sh
+
 
 echo "✅ Установка графического окружения..."
 
